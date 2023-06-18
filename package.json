@@ -10,6 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^2.1.4"
+    "@astrojs/solid-js": "^2.2.0",
+    "astro": "^2.6.4",
+    "solid-js": "^1.4.3"
+  },
+  "devDependencies": {
+    "@codemirror/language": "^6.8.0",
+    "@codemirror/legacy-modes": "^6.3.2",
+    "@codemirror/lint": "^6.2.2",
+    "@codemirror/state": "^6.2.1",
+    "@joe-re/sql-parser": "^1.5.1",
+    "codemirror": "^6.0.1",
+    "scalameta-parsers": "^4.7.8"
   }
 }
