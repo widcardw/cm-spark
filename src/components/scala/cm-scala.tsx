@@ -1,16 +1,16 @@
 import { StreamLanguage } from '@codemirror/language'
 import { EditorView, basicSetup } from 'codemirror'
-import { createSignal, type Component, createEffect } from 'solid-js'
+import { type Component, createEffect, createSignal, onMount } from 'solid-js'
 import { scala } from '@codemirror/legacy-modes/mode/clike'
-import { Diagnostic, linter } from '@codemirror/lint'
-import { ScalaParseError, parseSource, parseStat } from 'scalameta-parsers'
+import { /* Diagnostic, */ linter } from '@codemirror/lint'
+import { /* ScalaParseError, parseSource, */ parseStat } from 'scalameta-parsers'
 import { judgeAstHasError } from './utils'
 
 const CmScala: Component = () => {
   const [el, setEl] = createSignal<HTMLDivElement>()
   let editor: EditorView | null = null
 
-  createEffect(() => {
+  createEffect(async () => {
     if (!editor) {
       editor = new EditorView({
         parent: el(),
@@ -32,19 +32,26 @@ const CmScala: Component = () => {
             // })
             // return diagnostics
             // // For single script
-            const content = view.state.doc.toString()
-            if (!content) return []
-            const ast = parseStat(content)
-            if (judgeAstHasError(ast)) {
-              const { pos, error: message } = ast
-              return [{ message, from: pos.start, to: pos.end, severity: 'error' }]
+            try {
+              const content = view.state.doc.toString()
+              if (!content)
+                return []
+              const ast = parseStat(content)
+              if (judgeAstHasError(ast)) {
+                const { pos, error: message } = ast
+                return [{ message, from: pos.start, to: pos.end, severity: 'error' }]
+              }
+            }
+            catch (e) {
+              console.error(e)
             }
             return []
           }),
-        ]
+        ],
       })
     }
   })
+
   return <div ref={r => setEl(r)}></div>
 }
 
