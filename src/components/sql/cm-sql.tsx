@@ -1,12 +1,11 @@
 import { type Component, createEffect, createSignal, onCleanup } from 'solid-js'
 import { EditorView, basicSetup } from 'codemirror'
-// import { EditorState } from '@codemirror/state'
 import { linter } from '@codemirror/lint'
 import type { ParseError } from '@joe-re/sql-parser'
 import { parse } from '@joe-re/sql-parser'
-// import { sparkSQL } from '@codemirror/legacy-modes/mode/sql'
 import { SQLDialect, sql } from '@codemirror/lang-sql'
-import { StreamLanguage } from '@codemirror/language'
+
+// const completions = jsonCompletion.map
 
 const CmSql: Component = () => {
   const [el, setEl] = createSignal<HTMLDivElement>()

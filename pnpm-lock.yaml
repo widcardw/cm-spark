@@ -12,6 +12,9 @@ dependencies:
     version: 1.7.6
 
 devDependencies:
+  '@codemirror/autocomplete':
+    specifier: ^6.8.0
+    version: 6.8.0(@codemirror/language@6.8.0)(@codemirror/state@6.2.1)(@codemirror/view@6.13.2)(@lezer/common@1.0.3)
   '@codemirror/lang-sql':
     specifier: ^6.5.0
     version: 6.5.0(@codemirror/view@6.13.2)(@lezer/common@1.0.3)
