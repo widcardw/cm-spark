@@ -13,9 +13,7 @@ import * as jsonCompletion from './codemirror-spark-functions.json'
 
 import './cm-scala.css'
 
-function isCursorInString(state: EditorState) {
-  const cursor = state.selection.main.head
-  const line = state.doc.lineAt(cursor).text
+function isCursorInString2(cursor: number, line: string) {
   const reg = /(['"])[^'"]*\1/g
   const m = line.matchAll(reg)
   let match: IteratorResult<RegExpMatchArray, RegExpMatchArray> = m.next()
@@ -28,6 +26,12 @@ function isCursorInString(state: EditorState) {
     match = m.next()
   }
   return false
+}
+
+function isCursorInString(state: EditorState) {
+  const cursor = state.selection.main.head
+  const line = state.doc.lineAt(cursor).text
+  return isCursorInString2(cursor, line)
 }
 
 const CmScala: Component = () => {
@@ -80,9 +84,10 @@ const CmScala: Component = () => {
                 return dom
               }
               const snippet = (i.apply || '') as string
-              const apply = (view: EditorView, completion: Completion, from: number, to: number) => {
-                const cursor = view.state.selection.main.head
-                // const line = view.state.doc.lineAt(cursor).text
+              const apply = (view: EditorView, _completion: Completion, from: number, to: number) => {
+                // if current cursor is in string, then do not apply snippet
+                if (isCursorInString(view.state))
+                  return
                 const m = snippet.match(/\$\{\"(.*?)\"\}/)
                 let offset = 0
                 let head = 0
@@ -116,16 +121,14 @@ const CmScala: Component = () => {
               }
             }))],
             closeOnBlur: false,
+            tooltipClass(state) {
+              if (isCursorInString(state))
+                return 'display-none'
+              return ''
+            },
           }),
         ],
       })
-      // editor.contentDOM.addEventListener('keydown', () => {
-      //   const menu = editor!.dom.querySelector('.cm-tooltip-autocomplete')
-      //   if (menu && isCursorInString(editor!.state)) {
-      //     // console.log('in string')
-      //     // menu.remove()
-      //   }
-      // })
     }
   })
 
